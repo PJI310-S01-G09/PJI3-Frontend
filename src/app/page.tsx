@@ -3,16 +3,18 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import Header from "./_components/Header";
 import Sidebar from "./_components/Sidebar";
+import InputMask from "react-input-mask";
 import { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
 export default function Home() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [data, setData] = useState<Dayjs | null>(null);
   const [hora, setHora] = useState<Dayjs | null>(null);
 
@@ -57,21 +59,29 @@ export default function Home() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <InputMask
+            mask="(99) 99999-9999"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+          >
+            {(inputProps) => (
+              <TextField {...inputProps} label="Telefone" fullWidth />
+            )}
+          </InputMask>
 
           <Box className="flex">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar
-              value={data}
-              onChange={(novaData) => setData(novaData)}
-            />
-            <DigitalClock
-              value={hora}
-              onChange={(novaHora) => setHora(novaHora)}
-            />
-          </LocalizationProvider>
+              <DateCalendar
+                value={data}
+                onChange={(novaData) => setData(novaData)}
+              />
+              <DigitalClock
+                value={hora}
+                onChange={(novaHora) => setHora(novaHora)}
+              />
+            </LocalizationProvider>
           </Box>
 
-          
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Agendar
           </Button>
