@@ -7,12 +7,12 @@ export default function Login() {
 
   const paperStyles = {
     boxShadow: 'rgba(50, 50, 93, 0.5) 0px 50px 100px -20px, rgba(0, 0, 0, 0.8) 0px 30px 60px -30px, rgba(10, 37, 64, 0.3) 0px -2px 6px 0px inset',
-    backgroundColor: 'white', // Cor de fundo branco
-    margin: 'auto', // Margem automática
-    padding: '2rem', // Padding
-    width: '400px', // Largura do Paper
-    maxHeight: '300px', // Altura máxima
-    maxWidth: '100%', // Largura máxima
+    backgroundColor: 'white',
+    margin: 'auto', 
+    padding: '2rem', 
+    width: '400px',
+    maxHeight: '300px',
+    maxWidth: '100%',
     borderRadius: '12px',
   };
   
