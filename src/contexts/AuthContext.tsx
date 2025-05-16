@@ -14,7 +14,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem(Storage.TOKEN));
   const router = useRouter();
 
   useEffect(() => {
