@@ -20,7 +20,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
 import dayjs, { Dayjs } from "dayjs";
-import { getFreeHours } from "@/services/api/schedule";
+import { getFreeHours, schedule } from "@/services/api/schedule";
 import { ScheduleFreeHours } from "@/entities/schedule.entity";
 
 export default function Home() {
@@ -49,7 +49,7 @@ export default function Home() {
     setFreeHours(data);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!data || !hora) return alert("Data e hora obrigatórias");
@@ -72,8 +72,17 @@ export default function Home() {
       serviceDuration: 60,
     };
 
-    console.log(payload);
+    const { error, message, data: response } = await schedule(payload)
+
+    console.log('Schedule', response, message, error);
+
+    if (error || !response) {
+      console.error(error);
+      return alert(message?? "Erro ao agendar");
+    }
+
     alert("Agendado com sucesso!");
+    fetchFreeHours()
   };
 
   return (

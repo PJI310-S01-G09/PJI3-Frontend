@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import http, { ApiResponse } from "./http";
 import { handleApiError } from "@/utils/error.map";
-import { Schedule, ScheduleFreeHours } from "@/entities/schedule.entity";
+import { Schedule, ScheduleFreeHours, ScheduleRequestBody } from "@/entities/schedule.entity";
 
 export async function getSchedules(
   token: string
@@ -53,4 +53,29 @@ export async function getFreeHours(): Promise<{
       error: handleApiError("Erro ao buscar horários livres"),
     };
   }
+}
+
+export async function schedule(payload: ScheduleRequestBody): Promise<{
+    message: string | null,
+    error: string[] | null,
+    data?: Schedule
+}> {
+    try {
+        const { data } = await http.post<ApiResponse<Schedule>>('/schedule', payload);
+
+        const { data: apiResponse, error, message } = data
+
+        console.log('aaaaaa', apiResponse, error, message)
+        return { error: handleApiError(error), data: apiResponse!, message }
+    } catch (error) {
+        if (error instanceof AxiosError && error?.response?.data?.error) return {
+            message: null,
+            error:  error?.response?.data?.error,
+        }
+
+        return {
+            message: null,
+            error: handleApiError('Erro ao realizar agendamento')
+        }
+    }
 }

@@ -20,3 +20,14 @@ export type ScheduleFreeHours = {
   date: string
   slots: string[]
 }
+
+export type ScheduleRequestBody = {
+  scheduledAt: string
+  serviceDuration: number
+  client: {
+    cpf: string
+    email: string
+    name: string
+    phone: string
+  }
+}
