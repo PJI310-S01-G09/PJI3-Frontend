@@ -15,3 +15,8 @@ export type ScheduleResponse = {
   data: Schedule[];
   error: string[] | null;
 };
+
+export type ScheduleFreeHours = {
+  date: string
+  slots: string[]
+}
