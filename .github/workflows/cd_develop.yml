@@ -1,0 +1,53 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 📝 Write .env file
+        run: |
+          cat <<EOF > .env
+          ${{ secrets.DEV_ENV_FILE }}
+          EOF
+
+      - name: Install deps & build
+        run: |
+          npm install
+          npm run build
+
+      - name: Copy build to EC2 (via rsync over SSH)
+        uses: burnett01/rsync-deployments@7.0.2
+        with:
+          switches: -avz --delete
+          path: ./.next/
+          remote_path: ~/front-develop/.next/
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ${{ secrets.EC2_USER }}
+          remote_key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Restart app on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            source ~/.nvm/nvm.sh
+            nvm use 22
+            cd ~/front-develop
+            git pull origin develop
+            npm ci
+            pm2 restart front-develop
