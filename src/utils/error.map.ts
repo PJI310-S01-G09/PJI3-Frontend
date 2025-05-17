@@ -4,6 +4,7 @@ export const handleApiError = (error: string | string[] | null) => {
     return Array.isArray(error) ? error : [error]
 }
 
-export const APIErrorMap = {
-    INVALID_TOKEN: 'Token inválido'
+export const APIErrorMap: {[key: string]: string} = {
+    INVALID_TOKEN: 'Token inválido',
+    'client.cpf must be exactly 11 characters': 'CPF Inválido'
 }

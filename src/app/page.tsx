@@ -22,6 +22,8 @@ import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
 import dayjs, { Dayjs } from "dayjs";
 import { getFreeHours, schedule } from "@/services/api/schedule";
 import { ScheduleFreeHours } from "@/entities/schedule.entity";
+import { useSnackbar } from "@/contexts/SnackbarContext";
+import { APIErrorMap } from "@/utils/error.map";
 
 export default function Home() {
   const [nome, setNome] = useState("");
@@ -32,10 +34,21 @@ export default function Home() {
   const [hora, setHora] = useState<Dayjs | null>(null);
   const [cpf, setCpf] = useState("");
   const [freeHours, setFreeHours] = useState<ScheduleFreeHours[]>([]);
+  const { showMessage } = useSnackbar()
 
   useEffect(() => {
     fetchFreeHours();
   }, []);
+
+  const resetFields = () => {
+    setNome("");
+    setEmail("");
+    setTelefone("");
+    setIsWhatsApp(false);
+    setData(dayjs().hour(8).minute(0));
+    setHora(null);
+    setCpf("");
+  }
 
   const fetchFreeHours = async () => {
     const { data, error } = await getFreeHours();
@@ -45,14 +58,13 @@ export default function Home() {
       return;
     }
 
-    console.log("data", data);
     setFreeHours(data);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!data || !hora) return alert("Data e hora obrigatórias");
+    if (!data || !hora) return showMessage("Data e hora obrigatórias");
 
     const scheduledAt = data
       .set("hour", hora.hour())
@@ -74,15 +86,15 @@ export default function Home() {
 
     const { error, message, data: response } = await schedule(payload)
 
-    console.log('Schedule', response, message, error);
-
     if (error || !response) {
       console.error(error);
-      return alert(message?? "Erro ao agendar");
+      showMessage(error?.map(e => APIErrorMap[e] || 'Erro ao agendar')?.join(',') || 'Erro ao agendar', 'error')
+      return
     }
 
-    alert("Agendado com sucesso!");
+    showMessage(message || 'Agendamento realizado com sucesso', 'success')
     fetchFreeHours()
+    resetFields()
   };
 
   return (
