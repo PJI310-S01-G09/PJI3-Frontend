@@ -7,6 +7,7 @@ import { Storage } from "@/utils/storage.map";
 type AuthContextType = {
   token: string | null;
   isAuthenticated: boolean;
+  isInitialized: boolean;
   login: (token: string) => void;
   logout: () => void;
 };
@@ -14,12 +15,14 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem(Storage.TOKEN));
+  const [token, setToken] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const storedToken = localStorage.getItem(Storage.TOKEN);
     if (storedToken) setToken(storedToken);
+    setIsInitialized(true);
   }, []);
 
   const login = (newToken: string) => {
@@ -34,7 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, isAuthenticated: !!token, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, isAuthenticated: !!token, isInitialized, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
