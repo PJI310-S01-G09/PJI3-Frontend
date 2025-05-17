@@ -80,6 +80,7 @@ export default function Home() {
         phone: telefone.replace(/\D/g, ""),
         cpf: cpf.replace(/\D/g, ""),
       },
+      isWhatsApp,
       scheduledAt,
       serviceDuration: 60,
     };

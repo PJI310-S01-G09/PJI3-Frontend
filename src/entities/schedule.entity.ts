@@ -23,6 +23,7 @@ export type ScheduleFreeHours = {
 
 export type ScheduleRequestBody = {
   scheduledAt: string
+  isWhatsApp: boolean
   serviceDuration: number
   client: {
     cpf: string
