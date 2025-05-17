@@ -85,7 +85,7 @@ export default function Home() {
 
     if (error || !response) {
       console.error(error);
-      showMessage(error?.map(e => APIErrorMap[e] || 'Erro ao agendar')?.join(',') || 'Erro ao agendar', 'error')
+      showMessage(error?.map(e => APIErrorMap[e] || e)?.join(',') || 'Erro ao agendar', 'error')
       return
     }
 
