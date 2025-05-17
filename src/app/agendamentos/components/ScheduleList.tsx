@@ -4,20 +4,21 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useEffect, useState } from "react";
 import { getSchedules } from "@/services/api/schedule";
 import { Schedule } from "@/entities/schedule.entity";
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import Link from "next/link";
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 
 export const ScheduleList = () => {
   const { token } = useAuth();
   const [scheduleData, setScheduleData] = useState<Schedule[]>([]);
-  const [filteredScheduleData, setFilteredScheduleData] = useState<Schedule[]>([]);
+  const [filteredScheduleData, setFilteredScheduleData] = useState<Schedule[]>(
+    []
+  );
   const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export const ScheduleList = () => {
         )
       );
     }
-  }, [selectedDate])
+  }, [selectedDate]);
 
   const fetchSchedule = async () => {
     if (!token) return;
@@ -68,7 +69,26 @@ export const ScheduleList = () => {
       field: "phone",
       headerName: "Telefone",
       flex: 1,
-      valueGetter: (params, row) => row.client.phone,
+      renderCell: (params) => {
+        const phone = params.row.client.phone;
+        const isWhatsapp = params.row.client.isWhatsapp;
+        return (
+          <Box display="flex" alignItems="center" gap={1}>
+            <Typography variant="body2">{phone}</Typography>
+            {isWhatsapp && (
+              <Link
+                href={`https://wa.me/55${phone.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IconButton size="small" sx={{ p: 0.5 }}>
+                  <WhatsAppIcon color="success" fontSize="small" />
+                </IconButton>
+              </Link>
+            )}
+          </Box>
+        );
+      },
     },
     {
       field: "email",
@@ -122,9 +142,8 @@ export const ScheduleList = () => {
               />
             </Box>
           )}
-          {
-            !selectedDate && "Selecione uma data para exibir os agendamentos do dia"
-          }
+          {!selectedDate &&
+            "Selecione uma data para exibir os agendamentos do dia"}
         </Box>
       </Box>
     </Box>

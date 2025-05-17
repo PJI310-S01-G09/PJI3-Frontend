@@ -65,7 +65,6 @@ export async function schedule(payload: ScheduleRequestBody): Promise<{
 
         const { data: apiResponse, error, message } = data
 
-        console.log('aaaaaa', apiResponse, error, message)
         return { error: handleApiError(error), data: apiResponse!, message }
     } catch (error) {
         if (error instanceof AxiosError && error?.response?.data?.error) return {

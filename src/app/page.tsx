@@ -5,9 +5,6 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
-  Grid,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,7 +15,6 @@ import { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { DigitalClock } from "@mui/x-date-pickers/DigitalClock";
 import dayjs, { Dayjs } from "dayjs";
 import { getFreeHours, schedule } from "@/services/api/schedule";
 import { ScheduleFreeHours } from "@/entities/schedule.entity";
@@ -29,7 +25,7 @@ export default function Home() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [isWhatsApp, setIsWhatsApp] = useState(false);
+  const [isWhatsapp, setIsWhatsApp] = useState(false);
   const [data, setData] = useState<Dayjs | null>(dayjs().hour(8).minute(0));
   const [hora, setHora] = useState<Dayjs | null>(null);
   const [cpf, setCpf] = useState("");
@@ -79,8 +75,8 @@ export default function Home() {
         email,
         phone: telefone.replace(/\D/g, ""),
         cpf: cpf.replace(/\D/g, ""),
+        isWhatsapp,
       },
-      isWhatsApp,
       scheduledAt,
       serviceDuration: 60,
     };
@@ -158,7 +154,7 @@ export default function Home() {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={isWhatsApp}
+                  checked={isWhatsapp}
                   onChange={(e) => setIsWhatsApp(e.target.checked)}
                   color="primary"
                 />
