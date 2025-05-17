@@ -49,5 +49,5 @@ jobs:
             nvm use 22
             cd ~/front-develop
             git pull origin develop
-            npm i
+            npm ci
             pm2 restart front-develop
