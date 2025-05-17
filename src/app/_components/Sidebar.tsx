@@ -18,7 +18,7 @@ import {
 const sideBarItems = [
   { text: "Agendar", href: "/", mustBeLoggedIn: false },
   { text: "Agendamentos", href: "/agendamentos", mustBeLoggedIn: true },
-  { text: "Inventário", href: "/inventario", mustBeLoggedIn: true },
+  // { text: "Inventário", href: "/inventario", mustBeLoggedIn: true },
 ];
 
 export default function Sidebar() {
